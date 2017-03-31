@@ -11,8 +11,8 @@
 #define TX A4
 #define RX A5
 
-int DISTANCE = 0;
-String DISTANCE_STR;
+int DISTANCE = 0; //STATUS = 0;
+String DISTANCE_STR, STATUS;
 
 SoftwareSerial bluetooth (TX, RX);
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
@@ -32,27 +32,40 @@ void loop()
   //Serial.println(DISTANCE);
   if(DISTANCE > 150)
   {
-    DISTANCE_STR = "NO OBSTACLE AHEAD";
+    STATUS = "0";
+    //DISTANCE_STR = "NO OBSTACLE AHEAD";
+    DISTANCE_STR ="";
   }
   else if(DISTANCE < 150)
   {
     if(DISTANCE > 50)
     {
+      STATUS = "1";
+       bluetooth.println(STATUS);
       DISTANCE_STR = "OBSTACLE APPROACHING";
       //DISTANCE_STR = (String)DISTANCE;
+      delay(2000);
     }
     else if(DISTANCE >= 1 && DISTANCE <= 50)
     {
+      STATUS = "1";
+      
+       bluetooth.println(STATUS);
       DISTANCE_STR = "OBSTACLE AHEAD,\n TURN LEFT OR RIGHT";
+      delay(2000);
+   
     }
     else if(DISTANCE == 0)
     {
-      DISTANCE_STR = "NO OBSTACLE AHEAD";
+      //DISTANCE_STR = "NO OBSTACLE AHEAD";
+     STATUS="0";
+      //bluetooth.println(STATUS);
     }
   }
-  bluetooth.println(DISTANCE_STR);
+  //bluetooth.println(DISTANCE_STR);
+  //bluetooth.println(STATUS);
   Serial.println(DISTANCE_STR);
-  delay(100);
+  delay(150);
   
   //Serial.println("cm");
 }
